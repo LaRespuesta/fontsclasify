@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clasificación de Fuentes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #1a73e8;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        header h2 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        button {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        button:hover {
+            background-color: #155bb5;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #1a73e8;
+            color: white;
+        }
+
+        footer {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        footer button {
+            flex-grow: 1;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .tabs {
+            display: flex;
+            background-color: #f1f1f1;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tab {
+            flex-grow: 1;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            border-bottom: none;
+        }
+
+        .tab.active {
+            background-color: white;
+            border-bottom: 1px solid white;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>TU PÁGINA PARA CLASIFICAR LAS FUENTES</h1>
+        <h2>Una página creada por NICOSTUDIOS Productora Audiovisual</h2>
+    </header>
+
+    <div class="tabs">
+        <div class="tab active" data-tab="1">Noticia 1</div>
+        <div class="tab" data-tab="2">Noticia 2</div>
+        <div class="tab" data-tab="3">Noticia 3</div>
+        <div class="tab" data-tab="4">Noticia 4</div>
+        <div class="tab" data-tab="5">Noticia 5</div>
+        <div class="tab" data-tab="6">Noticia 6</div>
+        <div class="tab" data-tab="7">Noticia 7</div>
+        <div class="tab" data-tab="8">Noticia 8</div>
+        <div class="tab" data-tab="9">Noticia 9</div>
+        <div class="tab" data-tab="10">Noticia 10</div>
+    </div>
+
+    <div class="container">
+        <button id="addSource">AÑADIR FUENTES</button>
+        <button id="exportData">Exportar</button>
+        <button id="clearData">Limpiar</button>
+
+        <table id="sourceTable" class="hidden">
+            <thead>
+                <tr>
+                    <th>Nº de la fuente</th>
+                    <th>Fuente en el texto</th>
+                    <th>Atribución</th>
+                    <th>Según su naturaleza</th>
+                    <th>Según su origen</th>
+                    <th>Importancia</th>
+                    <th>Ámbito de procedencia</th>
+                    <th>Calidad</th>
+                    <th>Representatividad</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <form id="sourceForm" class="hidden">
+            <div class="form-group">
+                <label for="sourceNumber">Nº de la fuente</label>
+                <input type="text" id="sourceNumber">
+            </div>
+            <div class="form-group">
+                <label for="sourceText">Introduce la fuente como se cita en el texto</label>
+                <input type="text" id="sourceText">
+            </div>
+            <div class="form-group">
+                <label for="attribution">Atribución</label>
+                <input type="text" id="attribution">
+            </div>
+            <div class="form-group">
+                <label for="nature">Según su naturaleza</label>
+                <input type="text" id="nature">
+            </div>
+            <div class="form-group">
+                <label for="origin">Según su origen o cercanía a los hechos</label>
+                <input type="text" id="origin">
+            </div>
+            <div class="form-group">
+                <label for="importance">En función de su importancia en la información</label>
+                <input type="text" id="importance">
+            </div>
+            <div class="form-group">
+                <label for="scope">Según el ámbito de procedencia</label>
+                <input type="text" id="scope">
+            </div>
+            <div class="form-group">
+                <label for="quality">Según la calidad de la fuente</label>
+                <input type="text" id="quality">
+            </div>
+            <div class="form-group">
+                <label for="representativity">Grado de representatividad o interlocución de las fuentes</label>
+                <input type="text" id="representativity">
+            </div>
+            <button type="button" id="saveSource">Guardar</button>
+        </form>
+    </div>
+
+    <script>
+        const tabs = document.querySelectorAll('.tab');
+        const sourceForm = document.getElementById('sourceForm');
+        const sourceTable = document.getElementById('sourceTable');
+        const addSourceBtn = document.getElementById('addSource');
+        const exportDataBtn = document.getElementById('exportData');
+        const clearDataBtn = document.getElementById('clearData');
+        const saveSourceBtn = document.getElementById('saveSource');
+        const tbody = sourceTable.querySelector('tbody');
+
+        let activeTab = 1;
+        let sources = JSON.parse(localStorage.getItem('sources')) || {};
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelector('.tab.active').classList.remove('active');
+                tab.classList.add('active');
+                activeTab = parseInt(tab.dataset.tab, 10);
+                loadTab();
+            });
+        });
+
+        addSourceBtn.addEventListener('click', () => {
+            sourceForm.reset();
+            sourceForm.classList.remove('hidden');
+            sourceTable.classList.add('hidden');
+        });
+
+        saveSourceBtn.addEventListener('click', () => {
+            const newSource = {
+                sourceNumber: document.getElementById('sourceNumber').value,
+                sourceText: document.getElementById('sourceText').value,
+                attribution: document.getElementById('attribution').value,
+                nature: document.getElementById('nature').value,
+                origin: document.getElementById('origin').value,
+                importance: document.getElementById('importance').value,
+                scope: document.getElementById('scope').value,
+                quality: document.getElementById('quality').value,
+                representativity: document.getElementById('representativity').value,
+            };
+
+            if (!sources[activeTab]) sources[activeTab] = [];
+            sources[activeTab].push(newSource);
+
+            saveData();
+            loadTab();
+        });
+
+        clearDataBtn.addEventListener('click', () => {
+            sources[activeTab] = [];
+            saveData();
+            loadTab();
+        });
+
+        exportDataBtn.addEventListener('click', () => {
+            const data = JSON.stringify(sources);
+            const blob = new Blob([data], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `sources_tab_${activeTab}.json`;
+            a.click();
+        });
+
+        function loadTab() {
+            sourceForm.classList.add('hidden');
+            tbody.innerHTML = '';
+            const tabSources = sources[activeTab] || [];
+            if (tabSources.length === 0) {
+                sourceTable.classList.add('hidden');
+            } else {
+                sourceTable.classList.remove('hidden');
+                tabSources.forEach((source, index) => {
+                    const row = document.createElement('tr');
+                    Object.values(source).forEach(value => {
+                        const cell = document.createElement('td');
+                        cell.textContent = value;
+                        row.appendChild(cell);
+                    });
+                    const actionsCell = document.createElement('td');
+                    const editBtn = document.createElement('button');
+                    editBtn.textContent = 'Editar';
+                    actionsCell.appendChild(editBtn);
+                    row.appendChild(actionsCell);
+                    tbody.appendChild(row);
+                });
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('sources', JSON.stringify(sources));
+        }
+
+        loadTab();
+    </script>
+</body>
+</html>
